@@ -9,7 +9,7 @@ import os
 app = Flask(__name__)
 
 # 你的 channel access token 和 channel secret
-line_bot_api = LineBotApi('NHC9uecjXr3bEcR9FuhfKBaCJ30XnGpazMVjqn7CCUk6uHdCTv5pc+VdIqY1jYz5ykxi6gMFk9VxlNImbujsAa28wyiz+IW7GVh6UGG7qLVBMZe+8yX5S6Nz60Yt5hyPhmfl4PoPTq50i4J1YGnBzAdB04t89/1O/w1cDnyilFU=')
+line_bot_api = LineBotApi('lb3HWlifW0W9hl6Tw0MbmC3XHoBK9ZcxyiSQBx5OV3kIB1VNbutMSWtyfvCRmeK4ykxi6gMFk9VxlNImbujsAa28wyiz+IW7GVh6UGG7qLV7pMyw6MGF0edohipcc+Cbfa6a/SrQYwTlxwTglkkttAdB04t89/1O/w1cDnyilFU=')
 handler = WebhookHandler('c5e8feb93963ce63f594d7a5841347d1')
 
 @app.route("/callback", methods=['POST'])
