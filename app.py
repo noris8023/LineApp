@@ -1,14 +1,14 @@
 from flask import Flask, request, abort, send_file
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
-from linebot.v3 import LineBotApi
-from linebot.v3.webhook import WebhookHandler
+from linebot import LineBotApi
+from linebot import WebhookHandler
 import yt_dlp
 import os
 
 app = Flask(__name__)
 
-
+# 你的 channel access token 和 channel secret
 line_bot_api = LineBotApi('NHC9uecjXr3bEcR9FuhfKBaCJ30XnGpazMVjqn7CCUk6uHdCTv5pc+VdIqY1jYz5ykxi6gMFk9VxlNImbujsAa28wyiz+IW7GVh6UGG7qLVBMZe+8yX5S6Nz60Yt5hyPhmfl4PoPTq50i4J1YGnBzAdB04t89/1O/w1cDnyilFU=')
 handler = WebhookHandler('c5e8feb93963ce63f594d7a5841347d1')
 
