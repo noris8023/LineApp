@@ -1,3 +1,5 @@
+pip install --upgrade line-bot-sdk
+
 from flask import Flask, request, abort, send_file
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
