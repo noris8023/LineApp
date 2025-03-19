@@ -8,8 +8,8 @@ import os
 app = Flask(__name__)
 
 # 填入你在 Line Developers 取得的 Channel Access Token 和 Secret
-LINE_CHANNEL_ACCESS_TOKEN = '你的 Channel Access Token'
-LINE_CHANNEL_SECRET = '你的 Channel Secret'
+LINE_CHANNEL_ACCESS_TOKEN = 'NHC9uecjXr3bEcR9FuhfKBaCJ30XnGpazMVjqn7CCUk6uHdCTv5pc+VdIqY1jYz5ykxi6gMFk9VxlNImbujsAa28wyiz+IW7GVh6UGG7qLVBMZe+8yX5S6Nz60Yt5hyPhmfl4PoPTq50i4J1YGnBzAdB04t89/1O/w1cDnyilFU='
+LINE_CHANNEL_SECRET = 'c5e8feb93963ce63f594d7a5841347d1'
 
 line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(LINE_CHANNEL_SECRET)
