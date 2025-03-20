@@ -4,16 +4,15 @@ from linebot.v3.messaging import MessagingApi, ReplyMessageRequest
 from linebot.v3.webhook import WebhookHandler
 from linebot.v3.exceptions import InvalidSignatureError
 from linebot.v3.messaging.models import TextMessage
-import yt_dlp
 
 app = Flask(__name__)
 
-# 確保環境變數正確
-LINE_CHANNEL_ACCESS_TOKEN = os.getenv('LINE_CHANNEL_ACCESS_TOKEN')
-LINE_CHANNEL_SECRET = os.getenv('LINE_CHANNEL_SECRET')
+# 使用 Railway 變數名稱
+LINE_ACCESS_TOKEN = os.getenv('LINE_CHANNEL_ACCESS_TOKEN')
+LINE_SECRET = os.getenv('LINE_CHANNEL_SECRET')
 
 if not LINE_ACCESS_TOKEN or not LINE_SECRET:
-    raise ValueError("❌ LINE_ACCESS_TOKEN 或 LINE_SECRET 未設定！請在 Railway 環境變數設定它們。")
+    raise ValueError("❌ LINE_CHANNEL_ACCESS_TOKEN 或 LINE_CHANNEL_SECRET 未設定！請檢查 Railway 變數設定。")
 
 messaging_api = MessagingApi(LINE_ACCESS_TOKEN)
 handler = WebhookHandler(LINE_SECRET)
@@ -29,6 +28,7 @@ def callback():
         abort(400)
 
     return 'OK'
+
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
