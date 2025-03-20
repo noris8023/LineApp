@@ -1,5 +1,4 @@
 import os
-import time
 from flask import Flask, request, abort, send_from_directory
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, VideoSendMessage
@@ -48,25 +47,21 @@ def handle_message(event):
     if video_path:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="影片下載完成，請稍後..."))
         send_video_to_user(event.source.user_id, video_path)  # 傳送影片給使用者
-        os.remove(os.path.join(public_folder, video_path))  # 刪除本地影片
+        os.remove(video_path)  # 刪除本地影片
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="影片下載失敗或無法處理該網址！"))
 
 def download_video(url):
     try:
-        # 使用時間戳生成唯一的影片名稱
-        video_name = f"{int(time.time())}.mp4"
-        video_path = os.path.join(public_folder, video_name)
-
         ydl_opts = {
             'format': 'best',
-            'outtmpl': video_path,  # 使用唯一的檔名
+            'outtmpl': os.path.join(public_folder, 'downloaded_video.mp4'),  # 儲存影片的路徑，保證它在 public 資料夾
             'quiet': True,
         }
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
         
-        return video_name  # 返回生成的唯一檔名
+        return 'downloaded_video.mp4'
     except Exception as e:
         print(f"下載錯誤: {e}")
         return None
