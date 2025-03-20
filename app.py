@@ -9,8 +9,8 @@ import yt_dlp
 app = Flask(__name__)
 
 # 確保環境變數正確
-LINE_ACCESS_TOKEN = os.getenv('LINE_ACCESS_TOKEN')
-LINE_SECRET = os.getenv('LINE_SECRET')
+LINE_CHANNEL_ACCESS_TOKEN = os.getenv('LINE_CHANNEL_ACCESS_TOKEN')
+LINE_CHANNEL_SECRET = os.getenv('LINE_CHANNEL_SECRET')
 
 if not LINE_ACCESS_TOKEN or not LINE_SECRET:
     raise ValueError("❌ LINE_ACCESS_TOKEN 或 LINE_SECRET 未設定！請在 Railway 環境變數設定它們。")
