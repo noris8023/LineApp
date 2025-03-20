@@ -1,11 +1,11 @@
 import os
-from flask import Flask, request, abort
+from flask import Flask, request, abort, send_from_directory
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, VideoSendMessage
 from linebot import LineBotApi, WebhookHandler
 import yt_dlp
 
-app = Flask(__name__, static_url_path='/public', static_folder='public')
+app = Flask(__name__)
 
 # 從環境變數讀取 LINE 設定（Railway 環境變數需要設定）
 LINE_ACCESS_TOKEN = os.getenv('LINE_ACCESS_TOKEN')
@@ -18,6 +18,9 @@ if not LINE_ACCESS_TOKEN or not LINE_SECRET:
 
 line_bot_api = LineBotApi(LINE_ACCESS_TOKEN)
 handler = WebhookHandler(LINE_SECRET)
+
+# 設定 public 資料夾的路徑
+public_folder = 'public'
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -44,7 +47,7 @@ def handle_message(event):
     if video_path:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="影片下載完成，請稍後..."))
         send_video_to_user(event.source.user_id, video_path)  # 傳送影片給使用者
-        os.remove(f'public/{video_path}')  # 刪除本地影片
+        os.remove(video_path)  # 刪除本地影片
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="影片下載失敗或無法處理該網址！"))
 
@@ -52,7 +55,7 @@ def download_video(url):
     try:
         ydl_opts = {
             'format': 'best',
-            'outtmpl': 'public/downloaded_video.mp4',  # 下載的影片檔案儲存在 public 資料夾中
+            'outtmpl': os.path.join(public_folder, 'downloaded_video.mp4'),  # 儲存影片的路徑，保證它在 public 資料夾
             'quiet': True,
         }
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -63,18 +66,22 @@ def download_video(url):
         print(f"下載錯誤: {e}")
         return None
 
+@app.route('/public/<filename>')
+def serve_file(filename):
+    return send_from_directory(public_folder, filename)
+
 def send_video_to_user(user_id, video_path):
     try:
-        # 使用 Railway 公共 URL 發送影片
-        public_video_url = f'https://lineapp-production.up.railway.app/public/{video_path}'  # 使用 public 資料夾中的影片
-        public_preview_url = f'https://lineapp-production.up.railway.app/public/preview.jpg'  # 影片縮圖，這裡也需要存放於 public 資料夾
-        
+        # 使用 Railway 提供的公開 URL 來發送影片
+        video_url = f'https://lineapp-production.up.railway.app/public/{video_path}'
+        preview_url = 'https://your-preview-image-url'  # 可自定義縮圖 URL
+
         # 發送影片給使用者
         line_bot_api.push_message(
             user_id,
             VideoSendMessage(
-                original_content_url=public_video_url,  # 公共影片的 URL
-                preview_image_url=public_preview_url  # 影片縮圖的 URL
+                original_content_url=video_url,  # 影片的公開 URL
+                preview_image_url=preview_url  # 影片縮圖
             )
         )
     except Exception as e:
