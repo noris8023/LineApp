@@ -40,17 +40,17 @@ def handle_message(event):
     url = event.message.text.strip()
 
     if not url.startswith("http"):
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="汪汪叫~"))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請提供有效的影片網址！"))
         return
 
     video_path = download_video(url)
     
     if video_path:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="影片下載中，請稍後..."))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="影片下載完成，請稍後..."))
         send_video_to_user(event.source.user_id, video_path)  # 傳送影片給使用者
         
         # 設置計時器，10秒後重設影片
-        threading.Timer(5, reset_video, [video_path]).start()
+        threading.Timer(10, reset_video, [video_path]).start()
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="影片下載失敗或無法處理該網址！"))
 
@@ -97,7 +97,6 @@ def reset_video(video_path):
         if os.path.exists(os.path.join(public_folder, video_path)):
             os.remove(os.path.join(public_folder, video_path))
         print(f"影片 {video_path} 已重設")
-                line_bot_api.reply_message(event.reply_token, TextSendMessage(text="影片上傳成功!!"))
     except Exception as e:
         print(f"重設影片錯誤: {e}")
 
