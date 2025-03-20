@@ -4,6 +4,7 @@ from linebot.v3.messaging import MessagingApi, ReplyMessageRequest
 from linebot.v3.webhook import WebhookHandler
 from linebot.v3.exceptions import InvalidSignatureError
 from linebot.v3.messaging.models import TextMessage
+from linebot.v3.messaging.events import MessageEvent  # 加入這行
 
 app = Flask(__name__)
 
@@ -28,7 +29,6 @@ def callback():
         abort(400)
 
     return 'OK'
-
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
