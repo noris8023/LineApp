@@ -48,7 +48,6 @@ def handle_message(event):
     if video_path:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="影片下載完成，請稍後..."))
         send_video_to_user(event.source.user_id, video_path)  # 傳送影片給使用者
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="影片下載成功!!"))
         # 設置計時器，10秒後重設影片
         threading.Timer(8, reset_video, [video_path]).start()
         
