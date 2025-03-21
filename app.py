@@ -50,7 +50,8 @@ def handle_message(event):
         send_video_to_user(event.source.user_id, video_path)  # 傳送影片給使用者
         
         # 設置計時器，10秒後重設影片
-        threading.Timer(10, reset_video, [video_path]).start()
+        threading.Timer(5, reset_video, [video_path]).start()
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="影片下載成功!!"))
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="影片下載失敗或無法處理該網址！"))
 
